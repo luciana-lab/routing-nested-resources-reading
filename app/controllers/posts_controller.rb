@@ -1,11 +1,18 @@
 class PostsController < ApplicationController
 
+  # add conditional for whether the user is trying to
+  # access the index of all posts (Post.all - /posts ) or
+  # just the index of all posts by a certain author (Author.find(params[:author_id]).posts - /authors/:id/posts)
   def index
-    @posts = Post.all
+    if params[:author_id]
+      @posts = Author.find(params[:author_id]).posts
+    else
+      @posts = Post.all
+    end
   end
 
   def show
-    @post = Post.find(params[:id])
+    @post = Post.find_by_id(params[:id])
   end
 
   def new
@@ -19,13 +26,13 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = Post.find(params[:id])
+    @post = Post.find_by_id(params[:id])
     @post.update(post_params)
     redirect_to post_path(@post)
   end
 
   def edit
-    @post = Post.find(params[:id])
+    @post = Post.find_by_id(params[:id])
   end
 
 private
